@@ -1,0 +1,10 @@
+Makefile
+demo
+demo-async
+demo-glib
+termkey.h
+*.so
+*.lo
+*.la
+man/termkey_getkey.3
+man/termkey_waitkey.3
