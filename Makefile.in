@@ -81,7 +81,7 @@ install-inc: termkey.h
 
 install-lib: $(LIBRARY)
 	install -d $(DESTDIR)$(LIBDIR)
-	$(DESTDIR)$(LIBDIR)/libtermkey.la
+	install libtermkey.la $(DESTDIR)$(LIBDIR)/libtermkey.la
 
 install-man:
 	install -d $(DESTDIR)$(MAN3DIR)
