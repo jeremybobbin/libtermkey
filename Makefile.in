@@ -36,16 +36,16 @@ all: $(LIBRARY) $(DEMOS)
 	$(CC) $(PIC) $(TERMKEY_CFLAGS) -o $@ -c $<
 
 $(LIBRARY): $(OBJECTS)
-	$(CC) $(PIC) -o $@ $^  $(TERMKEY_LDFLAGS) 
+	$(CC) $(PIC) $(TERMKEY_LDFLAGS) -o $@ $^
 
 demo: $(LIBRARY) demo.lo
-	$(CC) -o $@ $^
+	$(CC) $(PIC) -o $@ $^
 
 demo-async: $(LIBRARY) demo-async.lo
-	$(CC) -o $@ $^
+	$(CC) $(PIC) -o $@ $^
 
 demo-glib.lo: demo-glib.c termkey.h 
-	$(CC) -o $@ -c $< $(call pkgconfig, glib-2.0 --cflags)
+	$(CC) $(PIC) -o $@ -c $< $(call pkgconfig, glib-2.0 --cflags)
 
 demo-glib: $(LIBRARY) demo-glib.lo
 	$(CC) -o $@ $^ $(call pkgconfig, glib-2.0 --libs)
