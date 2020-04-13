@@ -1,7 +1,7 @@
 pkgconfig = $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config $(1))
 
-OBJECTS=termkey.lo driver-csi.lo driver-ti.lo
-LIBRARY=libtermkey.la
+OBJECTS=termkey.so driver-csi.so driver-ti.so
+LIBRARY=libtermkey.so
 
 DEMOS=demo demo-async
 
@@ -9,7 +9,7 @@ ifeq ($(call pkgconfig, glib-2.0 && echo 1),1)
   DEMOS+=demo-glib
 endif
 
-DEMO_OBJECTS=$(DEMOS:=.lo)
+DEMO_OBJECTS=$(DEMOS:=.so)
 
 TESTSOURCES=$(wildcard t/[0-9]*.c)
 TESTFILES=$(TESTSOURCES:.c=.t)
@@ -32,28 +32,28 @@ MAN7DIR=$(MANDIR)/man7
 
 all: $(LIBRARY) $(DEMOS)
 
-%.lo: %.c termkey.h termkey-internal.h
+%.so: %.c termkey.h termkey-internal.h
 	$(CC) $(PIC) $(TERMKEY_CFLAGS) -o $@ -c $<
 
 $(LIBRARY): $(OBJECTS)
 	$(CC) $(PIC) $(TERMKEY_LDFLAGS) -o $@ $^
 
-demo: $(LIBRARY) demo.lo
+demo: $(LIBRARY) demo.so
 	$(CC) $(PIC) -o $@ $^
 
-demo-async: $(LIBRARY) demo-async.lo
+demo-async: $(LIBRARY) demo-async.so
 	$(CC) $(PIC) -o $@ $^
 
-demo-glib.lo: demo-glib.c termkey.h 
+demo-glib.so: demo-glib.c termkey.h 
 	$(CC) $(PIC) -o $@ -c $< $(call pkgconfig, glib-2.0 --cflags)
 
-demo-glib: $(LIBRARY) demo-glib.lo
+demo-glib: $(LIBRARY) demo-glib.so
 	$(CC) -o $@ $^ $(call pkgconfig, glib-2.0 --libs)
 
-t/%.t: t/%.c $(LIBRARY) t/taplib.lo
+t/%.t: t/%.c $(LIBRARY) t/taplib.so
 	$(CC) -o $@ $^
 
-t/taplib.lo: t/taplib.c
+t/taplib.so: t/taplib.c
 	$(CC) $(TERMKEY_CFLAGS) -o $@ -c $^
 
 .PHONY: test
@@ -62,7 +62,7 @@ test: $(TESTFILES)
 
 .PHONY: clean-test
 clean-test:
-	rm -f $(TESTFILES) t/taplib.lo
+	rm -f $(TESTFILES) t/taplib.so
 
 .PHONY: clean
 clean: clean-test
@@ -81,7 +81,7 @@ install-inc: termkey.h
 
 install-lib: $(LIBRARY)
 	install -d $(DESTDIR)$(LIBDIR)
-	install libtermkey.la $(DESTDIR)$(LIBDIR)/libtermkey.la
+	install libtermkey.so $(DESTDIR)$(LIBDIR)/libtermkey.so
 
 install-man:
 	install -d $(DESTDIR)$(MAN3DIR)
