@@ -349,7 +349,7 @@ static int load_terminfo(TermKeyTI *ti)
     /* Some terminfos (e.g. xterm-1006) claim a different key_mouse that won't
      * give X10 encoding. We'll only accept this if it's exactly "\e[M"
      */
-    if(value && streq(value, "\x1b[M")) {
+    if(value && value != (char*)-1 && streq(value, "\x1b[M")) {
       struct trie_node *node = new_node_key(TERMKEY_TYPE_MOUSE, 0, 0, 0);
       insert_seq(ti, value, node);
     }
